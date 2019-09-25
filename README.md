@@ -1,7 +1,12 @@
 # Setting up docker containers for the OUTSTEP web application
 
 ## Setting up mysql docker container with persistent storage
-To allow for the databases to persist in the image, first create the following `Dockerfile`:
+First change to the `mysql` directory:
+```shell
+cd mysql/
+```
+
+To allow for the databases to persist in the image, we use the following [Dockerfile](mysql/Dockerfile):
 ```
 FROM mysql:latest
 RUN cp -r /var/lib/mysql /var/lib/mysql-no-volume
@@ -17,7 +22,9 @@ docker run -p 3306:3306 \
        -e MYSQL_PASSWORD=<password> \
        -ti o-mysql
 ```
-You can given any name to the image instead of `o-mysql`.
+> Note that in some systems you might have to use `sudo docker` instead of `docker`.
+
+You can given any tag to the image instead of `o-mysql`.
 ### Setting up database
 Use the [create](mysql/createdb.sql) and [populate](mysql/populatedb.sql) scripts.
 
@@ -30,3 +37,15 @@ docker exec -it <db-container-name> mysql -uroot -p -e "$(cat createdb.sql)"
 ```shell
 docker exec -it <db-container-name> mysql -u<username> -p -e "$(cat popualtedb.sql)"
 ```
+
+## Running the node.js server
+From the repository root, change to the `nodejs` directory:
+```shell
+cd nodejs/
+```
+Build and run the docker image,
+```shell
+docker build -t o-nodejs
+docker run -p 3000:3000 -d o-nodejs
+```
+Again, you can give any name to the image that is built here.
