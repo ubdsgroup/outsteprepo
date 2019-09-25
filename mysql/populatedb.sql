@@ -1,3 +1,4 @@
+use outstepdb
  -- populate peoples
 DELETE FROM `peoples_framework_tags`;
 INSERT INTO `peoples_framework_tags`
