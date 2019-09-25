@@ -1,0 +1,106 @@
+<!-- views/pages/globe.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../partials/head %>
+    <script src="/public/assets/js/worldwind.min.js" type="text/javascript"></script>
+</head>
+<body class="container">
+
+<header>
+    <% include ../partials/header %>
+</header>
+
+<main>
+  <div id="container">
+      <!-- Create a canvas for Web WorldWind. -->
+      <canvas id="canvasOne" width="940px" height="768px">
+          Your browser does not support HTML5 Canvas.
+      </canvas>
+  </div>
+</main>
+<footer>
+<% include ../partials/footer %>
+</footer>
+<script>
+var canvas = document.querySelector('canvas');
+fitToContainer(canvas);
+
+function fitToContainer(canvas){
+  canvas.style.width='100%';
+  canvas.style.height='100%';
+  canvas.width  = canvas.offsetWidth;
+  canvas.height = canvas.offsetHeight;
+}
+</script>
+
+<script>
+    // Register an event listener to be called when the page is loaded.
+    window.addEventListener("load", eventWindowLoaded, false);
+    // Define the event listener to initialize Web WorldWind.
+    function eventWindowLoaded() {
+        // Create a WorldWindow for the canvas.
+        var wwd = new WorldWind.WorldWindow("canvasOne");
+        // Add some image layers to the WorldWindow's globe.
+        wwd.addLayer(new WorldWind.BMNGOneImageLayer());
+        //wwd.addLayer(new WorldWind.BingAerialWithLabelsLayer());
+        wwd.addLayer(new WorldWind.BingAerialLayer());
+        // Add a compass, a coordinates display and some view controls to the WorldWindow.
+        //wwd.addLayer(new WorldWind.CompassLayer());
+        wwd.addLayer(new WorldWind.CoordinatesDisplayLayer(wwd));
+        wwd.addLayer(new WorldWind.ViewControlsLayer(wwd));
+
+	var text,
+            textAttributes = new WorldWind.TextAttributes(null),
+            textLayer = new WorldWind.RenderableLayer("OUTSTEPS Partners"),
+
+            partners = [
+                {'name': "University at Buffalo", 'latitude': 42.991, 'longitude': -78.7865, 'icon':'./public/assets/organization_logos/ub_logo.png'},
+                {'name': "University of Toledo", 'latitude': 41.660, 'longitude': -83.6089,'icon':'./public/assets/organization_logos/utoledo_logo.png'},
+                {'name': "SUNY College of Environmental Science and Forestry", 'latitude': 43.0352, 'longitude': -76.1359,'icon':'./public/assets/organization_logos/sunyesf_logo.png'},
+                {'name': "University of Michigan", 'latitude': 42.278, 'longitude': -83.738,'icon':'./public/assets/organization_logos/umich_logo.png'},
+                {'name': "SUNY Oswego", 'latitude': 43.4512, 'longitude': -76.5424,'icon':'./public/assets/organization_logos/sunyoswego_logo.png'},
+                {'name': "Clarkson University", 'latitude': 44.6636, 'longitude': -74.9987,'icon':'./public/assets/organization_logos/clarkson_logo.png'},
+                {'name': "Cleveland State University", 'latitude': 41.5023466, 'longitude': -81.6759,'icon':'./public/assets/organization_logos/clevelandstate_logo.png'},
+                {'name': "Penn State at Behrend", 'latitude': 42.1198064, 'longitude': -79.9844,'icon':'./public/assets/organization_logos/pennstatebehrend_logo.png'}
+            ];
+	//set up common placemark attributes
+        placemarkAttributes = new WorldWind.PlacemarkAttributes(null);
+        placemarkAttributes.imageScale = 0.2;
+        placemarkAttributes.imageOffset = new WorldWind.Offset(
+            WorldWind.OFFSET_FRACTION, 0.5,
+            WorldWind.OFFSET_FRACTION, 0.0);
+        placemarkAttributes.imageColor = WorldWind.Color.WHITE;
+        // Set up the common text attributes.
+        textAttributes.color = WorldWind.Color.CYAN;
+
+        // Set the depth test property such that the terrain does not obscure the text.
+        textAttributes.depthTest = false;
+
+        // For each partner, create a text shape.
+        for (var i = 0, len = partners.length; i < len; i++) {
+            var partner = partners[i],
+                partnerPosition = new WorldWind.Position(partner.latitude, partner.longitude, 0);
+
+            text = new WorldWind.GeographicText(partnerPosition, partner.name);
+            placemark = new WorldWind.Placemark(partnerPosition, true, null);
+
+            // Set the text attributes for this shape.
+            text.attributes = textAttributes;
+            placemarkAttributes = new WorldWind.PlacemarkAttributes(placemarkAttributes);
+            placemarkAttributes.imageSource = partner.icon;
+            placemark.attributes = placemarkAttributes;
+
+            // Add the text to the layer.
+            //textLayer.addRenderable(text);
+	    textLayer.addRenderable(placemark);
+        }
+
+        // Add the text layer to the WorldWindow's layer list.
+        wwd.addLayer(textLayer);
+	wwd.goTo(new WorldWind.Position(42.88,-78.87,1000000));
+    }
+</script>
+</body>
+</html>

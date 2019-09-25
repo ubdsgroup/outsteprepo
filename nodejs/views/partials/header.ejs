@@ -1,0 +1,100 @@
+<!-- views/partials/header.ejs -->
+
+<nav class="navbar navbar-inverse" role="navigation">
+<div class="container-fluid">
+    <div class="navbar-header">
+        <a class="navbar-brand" href="#">
+	    <i class="fa fa-tree"></i>
+            OUTSTEP-LGL
+        </a>
+    </div>
+
+    <ul class="nav navbar-nav">
+        <li class="active">
+            <form method='post' action='/'>
+	      <input type="hidden" name="accesstoken" value="<%= accesstoken%>" />
+              <button style="padding:15px;" class="btn btn-lg btn-link"><i class="fa fa-home"></i>Home</button>
+            </form>
+       </li>
+        <li>
+            <form method='post' action='/users'>
+	      <input type="hidden" name="accesstoken" value="<%= accesstoken%>" />
+              <button style="padding:15px;" class="btn btn-lg btn-link"><i class="fa fa-users"></i>Users</button>
+            </form>
+       </li>
+        <li class="dropdown">
+	  <button style="padding:15px;" class="btn btn-lg btn-link dropdown-toggle" data-toggle="dropdown">
+	    <i class="fa fa-database"></i>Data<span class="caret"></span>
+          </button> 
+	  <ul class="dropdown-menu">
+            <li><a href="/adddataset"><i class="fa fa-plus"></i>Add</a></li>
+            <li><a href="/listdatasets"><i class="fa fa-list"></i>List</a></li>
+          </ul>
+        </li>
+        <li>
+            <form method='post' action='/globe'>
+              <input type="hidden" name="accesstoken" value="<%= accesstoken%>" />
+	      <button style="padding:15px;" class="btn btn-lg btn-link"><i class="fa fa-globe"></i> <span>Globe</span> </button>
+           </form>
+	    </li>
+	<li>
+          <form method='get' action='/about'>
+            <button style="padding:15px;" class="btn btn-lg btn-link"><i class="fa fa-info-circle"></i> About</button>
+          </form>
+        </li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+	    <button style="padding:15px;" class="btn btn-lg btn-link dropdown-toggle" data-toggle="dropdown">
+                <% if (authenticated == 1) { %> 
+                    <i class="fa fa-user-o"></i> <%= user.firstname %> 
+		<% } else { %>
+                    <i class="fa fa-sign-in"></i> Login
+		<% } %>
+                <span class="caret"></span>
+            </button>
+            <panel class="dropdown-menu dropdown-form">
+		<% if (authenticated == 1) { %>
+                   <div class="panel panel-default">
+                      <div align="center" class="panel-heading"><span class="header">Welcome <%= user.firstname%></span></div>
+                      <div align="center" class="panel-body">
+		          <img src="<%= badgeurl%>" class="img-responsive" width=class="img-rounded" alt="<%= user.firstname%>"/>
+                      </div>
+                  </div>
+                <form method='post' action='/logout'>
+                    <div class="form-group" align="center"> 
+			  <input type="hidden" name="accesstoken" value="<%= accesstoken%>" />
+                          <input type="submit" class="btn btn-primary btn-xs" value="Logout" />
+                    </div>
+                </form>
+                <form method='post' action='/update'>
+                    <div class="form-group" align="center"> 
+			  <input type="hidden" name="accesstoken" value="<%= accesstoken%>" />
+                          <input type="submit" class="btn btn-primary btn-xs" value="Update Profile" />
+                    </div>
+                </form>
+		<% } else { %>
+		<form method='post' action='/login'>
+                        <div class="form-group">
+                            <input type="text" name="email" class="form-control" placeholder="Your Email *" value="" />
+                        </div>
+                        <div class="form-group">
+                            <input type="password" name="password" class="form-control" placeholder="Your Password *" value="" />
+                        </div>
+                        <div class="form-group" align="center">  
+			    <input type="hidden" name="accesstoken" value="<%= accesstoken%>" />
+                            <input type="submit" class="btn btn-primary btn-xs" value="Login" />
+                        </div>
+			<% if (baduser === 1) { %>
+			  <span class="label label-danger">Wrong email/password</span>
+			  <script>
+                           document.getElementById("login-dropdown").click();
+                          </script>
+                        <% } %>
+                </form>
+                <% } %>
+            </panel>
+        </li>
+    </ul>
+</div>
+</nav>

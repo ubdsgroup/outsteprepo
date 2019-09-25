@@ -1,0 +1,30 @@
+body   
+{ 
+    padding-top:50px; 
+}
+
+.dropdown-form
+{
+  padding: 10%;
+  width: 50px;
+}
+
+.header
+{
+  font-family: 'Bradley Hand';
+  font-weight: bold;
+  font-size: 24px;
+}
+
+#alertmessage {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+    .dropdown-menu {
+        width: 300px !important;  /* change the number to whatever that you need */
+    }
+}

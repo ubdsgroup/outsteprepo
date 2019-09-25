@@ -1,0 +1,172 @@
+<!-- views/pages/update.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../partials/head %>
+<script>
+function enableDisable(bEnable, tbox1,tbox2)
+    {
+         document.getElementById(tbox1).disabled = !bEnable
+         document.getElementById(tbox2).disabled = !bEnable
+    }
+</script>
+</head>
+<body class="container">
+
+<header>
+    <% include ../partials/header %>
+</header>
+
+<main>
+<div class="container">
+<form method="POST" action="/postupdate">
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label class="control-label" for="firstname">First Name</label>
+      <input type="text" class="form-control" name="firstname" id="firstname" value="<%= user.firstname%>" placeholder="Enter Firstname">
+    </div>
+    <div class="form-group col-md-6">
+      <label class="control-label" for="lastname">Last Name</label>
+      <input type="text" class="form-control" name="lastname" id="lastname" value="<%= user.lastname%>" placeholder="Enter Lastname">
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label class="control-label" for="email">Email</label>
+      <input type="text" disabled class="form-control" name="email" id="email" value="<%= user.email%>" placeholder="Enter Email">
+    </div>
+    <div class="form-group col-md-6">
+      <label class="control-label" for="url">Website</label>
+      <input type="text" class="form-control" name="url" id="url" value="<%= user.url%>" placeholder="Enter Website URL">
+    </div>
+  <div class="form-group col-md-12">
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" name="updatePassword" id="updatePassword" onclick="enableDisable(this.checked, 'password','confpassword')">
+      <label class="form-check-label" for="updatePassword">
+        Update password 
+      </label>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label class="control-label" for="password">Password</label>
+      <input type="password" disabled class="form-control" name="password" id="password" placeholder="Enter password">
+    </div>
+    <div class="form-group col-md-6">
+      <label class="control-label" for="confpassword">Confirm Password</label>
+      <input type="password" disabled class="form-control" name="confpassword" id="confpassword" placeholder="Confirm password">
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label class="control-label" for="organization">Organization:</label>
+      <select class="selectpicker form-control" data-header="Select organization" name="organization" id="organization">
+	<% for(let i = 0;i < organizations.length;i++) {%>
+           <option value="<%= organizations[i].id %>" <% if(user.organization === organizations[i].id){%>selected<%}%>><%= organizations[i].name %></option>
+         <% } %>
+      </select>
+    </div>
+    <div class="form-group col-md-6">
+      <label for="affiliation">Affiliation:</label>
+      <input type="text" class="form-control" name="affiliation" id="affiliation" value="<%= user.affiliation%>" placeholder="Enter Affiliation">
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label class="control-label" for="role">Role:</label>
+      <select class="selectpicker form-control" id="role" name="role">
+      <option hidden disabled selected value> Select role </option>
+	<% for(let i = 0;i < roles.length;i++) {
+	   if(roles[i].roletype === 'regular') {%>
+           <option value="<%= roles[i].id %>" <% if(user.role === roles[i].id){%>selected<%}%>><%= roles[i].name %></option>
+         <% } } %>
+      </select>
+    </div>
+    <div class="form-group col-md-6">
+      <label class="control-label" for="role">Expert Role (<i>Optional</i>):</label>
+      <select class="selectpicker form-control" id="expertrole" name="expertrole">
+      <option hidden disabled selected value> Select expert role</option>
+	<% for(let i = 0;i < roles.length;i++) {
+	   if(roles[i].roletype === 'expert') {%>
+           <option value="<%= roles[i].id %>" <% if(user.expert_role === roles[i].id){%>selected<%}%>><%= roles[i].name %></option>
+         <% } } %>
+      </select>
+    </div>
+  </div>
+  <div class="form-row">
+   <div class="form-group col-md-12">
+    <label>Interests - <a href="https://www.un.org/sustainabledevelopment/sustainable-development-goals/" target="_new">UN Sustainable Development Goals</a></label>
+   </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label class="control-label" for="sdgprimary">Primary</label>
+      <select class="selectpicker form-control" data-style="btn-success" id="sdgprimary" name="sdgprimary">
+      <option hidden disabled selected value> Select primary goal </option>
+	<% for(let i = 0;i < sdgs.length;i++) {%>
+           <option value="<%= sdgs[i].id %>" <%if(userinterests.primarysg === sdgs[i].id) {%>selected<%}%>><%= sdgs[i].name%> - <%= sdgs[i].description%></option>
+         <% } %>
+      </select>
+    </div>
+    <div class="form-group col-md-6">
+      <label class="control-label" for="sdgsecondary">Secondary (Choose 4)</label>
+      <select class="selectpicker form-control" multiple data-max-options="5" data-style="btn-success" data-actions-box="true" id="sdgsecondary" name="sdgsecondary">
+      <option hidden disabled selected value> Select four goals </option>
+	<% for(let i = 0;i < sdgs.length;i++) {%>
+           <option value="<%= sdgs[i].id %>"<% if(userinterests.secondarysgs.includes(sdgs[i].id)) {%>selected<% } %>><%= sdgs[i].name%> - <%= sdgs[i].description%></option>
+         <% } %>
+      </select>
+    </div>
+  </div>
+  <div class="form-row">
+   <div class="form-group col-md-12">
+    <label>Interests - <a href="http://peoplesresilience.org" target="_new">PEOPLES Resilience Framework</a></label>
+   </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label class="control-label" for="peoplesprimary">Primary</label>
+      <select class="selectpicker form-control" data-style="btn-primary" id="ptagprimary" name="ptagprimary">
+      <option hidden disabled selected value> Select primary tag</option>
+	<% for(let i = 0;i < ptags.length;i++) {%>
+           <option value="<%= ptags[i].id %>" <%if(userinterests.peoplesprimary === ptags[i].id){%>selected<% } %>><%= ptags[i].letter%> - <%= ptags[i].tag%></option>
+         <% } %>
+      </select>
+    </div>
+    <div class="form-group col-md-6">
+      <label class="control-label" for="ptagssecondary">Secondary (Choose 4)</label>
+      <select class="selectpicker form-control" multiple data-max-options="5" data-style="btn-primary" data-actions-box="true" id="ptagsecondary" name="ptagsecondary">
+      <option hidden disabled selected value> Select four tags</option>
+	<% for(let i = 0;i < ptags.length;i++) {%>
+           <option value="<%= ptags[i].id %>" <% if(userinterests.peoplessecondary.includes(ptags[i].id)) {%>selected<% } %>><%= ptags[i].letter%> - <%= ptags[i].tag%></option>
+         <% } %>
+      </select>
+    </div>
+  </div>
+  <div class="form-row">
+  <div class="form-group col-md-12">
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" name="updateBadge" id="updateBadge">
+      <label class="form-check-label" for="updateBadge">
+        Generate badge 
+      </label>
+    </div>
+  </div>
+  </div>
+  <input type="hidden" name="accesstoken" value="<%= accesstoken%>" />
+  <div class="form-row">
+    <div class="form-group col-md-12">
+      <button type="submit" class="btn btn-primary">Update</button>
+    </div>
+  </div>
+</form>
+</div>
+</main>
+
+<footer>
+    <% include ../partials/footer %>
+</footer>
+
+</body>
+</html>
