@@ -19,6 +19,8 @@ docker run -p 3306:3306 \
 ```
 You can given any name to the image instead of `o-mysql`.
 ### Setting up database
+Use the [create](mysql/createdb.sql) and [populate](mysql/populatedb.sql) scripts.
+
 ```shell
 docker exec -it <db-container-name> mysql -uroot -p -e "$(cat createdb.sql)"
 ```
