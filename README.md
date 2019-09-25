@@ -46,6 +46,6 @@ cd nodejs/
 Build and run the docker image,
 ```shell
 docker build -t o-nodejs .
-docker run -p 3000:3000 -d o-nodejs
+docker run -p 8080:8080 -d o-nodejs
 ```
 Again, you can give any name to the image that is built here.
