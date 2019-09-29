@@ -16,7 +16,7 @@ services:
       - /uploads:/app/uploads
     environment:
       - PORT=3000
-      - ROOT_URL=http://199.109.192.35:3000
+      - ROOT_URL=https://199.109.192.35:3000
       - MONGO_URL=mongodb://mongo:27017/rocketchat
       - MONGO_OPLOG_URL=mongodb://mongo:27017/local
       - MAIL_URL=smtp://smtp.email
@@ -63,7 +63,7 @@ services:
     image: rocketchat/hubot-rocketchat:latest
     restart: unless-stopped
     environment:
-      - ROCKETCHAT_URL=199.109.192.35:3000
+      - ROCKETCHAT_URL=https://199.109.192.35:3000
       - ROCKETCHAT_ROOM=GENERAL
       - ROCKETCHAT_USER=bot
       - ROCKETCHAT_PASSWORD=botpassword
