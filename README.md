@@ -49,3 +49,22 @@ docker build -t o-nodejs .
 docker run -p 8080:8080 -d o-nodejs
 ```
 Again, you can give any name to the image that is built here.
+
+### Building the rocket.chat app
+From the repository root, change to the `rocketchat` directory:
+```shell
+cd rocketchat/
+```
+We will be using the `docket-compose.yml` file (you can modify some of the option, if needed). In particular, you need to replace the `ROOT_URL` field with the appropriate URL. 
+> Also, we are going to use the `/data` and `/uploads` directory on the host to store the data. Make sure that those directories exist and have the correct permissions.
+
+```shell
+docker-compose up -d mongo
+docker-compose up -d mongo-init-replica
+docker-compose up -d rocketchat
+```
+After setting up the application by visiting the URL on a browser, you can create a bot to talk to. Edit the file `docker-compose.yml` again to change the variables `ROCKETCHAT_USER` and `ROCKETCHAT_PASSWORD` in the hubot section and then start up hubot:
+```shell
+docker-compose up -d hubot
+```
+More details are available [here](https://rocket.chat/docs/installation/docker-containers/docker-compose/).
