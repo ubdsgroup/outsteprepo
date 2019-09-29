@@ -50,7 +50,7 @@ docker run -p 8080:8080 -d o-nodejs
 ```
 Again, you can give any name to the image that is built here.
 
-### Building the rocket.chat app
+## Building the rocket.chat app
 From the repository root, change to the `rocketchat` directory:
 ```shell
 cd rocketchat/
